@@ -1,13 +1,13 @@
-# Logger
+# Lima
 A lightweight logging library for C++
 
 This library is part of a long term project that aims to build a small game engine and break it down into various smaller projects.
 This is the first library and may be revisited when additional features are needed.
 
-## Version 1.1.2 - Namespace convention
-- Major: Full release
-- Minor: Refactor and Cleanup
-- Patch: Namespace convention
+## Version 2.0.0 - Lima release
+- Major: Lima release
+- Minor: Lima release
+- Patch: Lima release
 
 ## Features
 - Single file header only implementation
@@ -22,30 +22,30 @@ This is the first library and may be revisited when additional features are need
 This library was built using modern C++ (C++17) features and was solely tested on a macos environment using Clang++ 16.0.0, meaning using different tools may not work as intended.
 
 ## Usage
-To get started with Logger, copy the `Logger.hpp` file from the repository and add it to your project.
+To get started with Lima, copy the `lima.hpp` file from the repository and add it to your project.
 Include the header files to your cpp files and use any of the macros from the example bellow!
 
 Example:
 ```C++
 //test.cpp
-#include "logger.hpp"
+#include "lima.hpp"
 
 int main() {
 
     // Logging with different log types
 
-    LOGGER_TRACE("Testing TRACE logging!");
-    LOGGER_DEBUG("Testing DEBUG logging!");
-    LOGGER_INFO("Testing INFO logging!");
-    LOGGER_WARNING("Testing WARNING logging!");
-    LOGGER_ERROR("Testing ERROR logging!");
-    LOGGER_FATAL("Testing FATAL logging!");
+    LOG_TRACE("Testing TRACE logging!");
+    LOG_DEBUG("Testing DEBUG logging!");
+    LOG_INFO("Testing INFO logging!");
+    LOG_WARNING("Testing WARNING logging!");
+    LOG_ERROR("Testing ERROR logging!");
+    LOG_FATAL("Testing FATAL logging!");
 
     // Logging with multiple arguments to the methods
 
-    LOGGER_DEBUG("Testing ", "multiple ", "arguments!");
-    LOGGER_DEBUG("Testing ", 2, " different ", "argument types!");
-    LOGGER_DEBUG("Testing multiple different types: ", 100, ' ', 100.00, " ", 0x64, '!');
+    LOG_DEBUG("Testing ", "multiple ", "arguments!");
+    LOG_DEBUG("Testing ", 2, " different ", "argument types!");
+    LOG_DEBUG("Testing multiple different types: ", 100, ' ', 100.00, " ", 0x64, '!');
 
     // Note: if you wish to use a custom class or type make sure it has the << operator defined!
 
@@ -55,13 +55,13 @@ int main() {
 
 That's it! It's as simple as that! Feel free to use this library in your personnal projects!
 
-If you wish to keep your logs in a file rather than outputing to the console, Logger supports alternate output streams.
-Simply use the `LOGGER_SET_OUTPUT_STREAM()` macro.
+If you wish to keep your logs in a file rather than outputing to the console, Lima supports alternate output streams.
+Simply use the `LIMA_SET_OUTPUT_STREAM()` macro.
 
 Example:
 ```C++
 //test.cpp
-#include "logger.hpp"
+#include "lima.hpp"
 
 #include <fstream>
 #include <string>
@@ -70,46 +70,46 @@ int main() {
 
     std::string filePath = "log.txt";
     std::ofstream ofstream(filePath);
-    LOGGER_SET_OUTPUT_STREAM(&ofstream);
+    LIMA_SET_OUTPUT_STREAM(&ofstream);
 
-    LOGGER_DEBUG("Testing alternate output streams!");
+    LOG_DEBUG("Testing alternate output streams!");
 
     return 0;
 }
 ```
 
-For output preferences, Logger uses flags.
-Simply use the `LOGGER_SET_FLAG()` and `LOGGER_CLEAR_FLAG()` macros.
+For output preferences, Lima uses flags.
+Simply use the `LIMA_SET_FLAG()` and `LIMA_CLEAR_FLAG()` macros.
 
 Example:
 ```C++
 // test.cpp
-#include "logger.hpp"
+#include "lima.hpp"
 
 int main() {
 
     // Note: by default, most flags are set to true! (See flag defaults below)
-    LOGGER_DEBUG("Testing different output flags!");
+    LOG_DEBUG("Testing different output flags!");
 
-    // Use LOGGER_CLEAR_FLAG() to set flags to false
+    // Use LIMA_CLEAR_FLAG() to set flags to false
 
-    LOGGER_CLEAR_FLAG(logger::Flag::TIMESTAMPS_PREFIX);
-    LOGGER_DEBUG("Testing different output flags!");
+    LIMA_CLEAR_FLAG(lima::Flag::TIMESTAMPS_PREFIX);
+    LOG_DEBUG("Testing different output flags!");
 
-    LOGGER_CLEAR_FLAG(logger::Flag::WHITESPACE_PREFIX);
-    LOGGER_DEBUG("Testing different output flags!");
+    LIMA_CLEAR_FLAG(lima::Flag::WHITESPACE_PREFIX);
+    LOG_DEBUG("Testing different output flags!");
 
-    // Use LOGGER_SET_FLAGS() to set them to true
+    // Use LIMA_SET_FLAGS() to set them to true
 
-    LOGGER_SET_FLAG(logger::Flag::TIMESTAMPS_PREFIX);
-    LOGGER_DEBUG("Testing different output flags!");
+    LIMA_SET_FLAG(lima::Flag::TIMESTAMPS_PREFIX);
+    LOG_DEBUG("Testing different output flags!");
 
-    LOGGER_CLEAR_FLAG(logger::Flag::LOGTYPES_PREFIX);
-    LOGGER_DEBUG("Testing different output flags!");
+    LIMA_CLEAR_FLAG(lima::Flag::LOGTYPES_PREFIX);
+    LOG_DEBUG("Testing different output flags!");
 
-    LOGGER_SET_FLAG(logger::Flag::WHITESPACE_PREFIX);
-    LOGGER_SET_FLAG(logger::Flag::LOGTYPES_PREFIX);
-    LOGGER_DEBUG("Testing different output flags!");
+    LIMA_SET_FLAG(lima::Flag::WHITESPACE_PREFIX);
+    LIMA_SET_FLAG(lima::Flag::LOGTYPES_PREFIX);
+    LOG_DEBUG("Testing different output flags!");
 
     return 0;
 }
@@ -121,19 +121,20 @@ Example:
 
 ```C++
 //test.cpp
-#include "logger.hpp"
+#include "lima.hpp"
 
 int main() {
 
     // Set the log tag prefix flag
-    LOGGER_SET_FLAG(logger::Flag::LOGTAG_PREFIX);
+    LIMA_SET_FLAG(lima::Flag::LOGTAG_PREFIX);
 
-    logger::LogTag testingTag("Testing"); // Create a log tag
-    LOGGER_DEBUG(testingTag, "Testing tag specification!");
+    lima::LogTag testingTag("Testing"); // Create a log tag
+    LOG_DEBUG(testingTag, "Testing tag specification!");
 
     // Note: using multiple log tags
     // or not specifying the log tag as the first argument
-    // will cause unwanted behaviour when filtering!
+    // will cause unwanted behaviour when filtering
+    // and will not log to the console
 
     return 0;
 ```
@@ -150,6 +151,11 @@ int main() {
 - `END_OF_LINE_SUFFIX`,   `true`,  Toggles the display of a end of line following the message
 
 ## Changelog
+
+### Version 2.0.0 - Lima release
+- Changed the naming and branding of the library
+- Changed the LogTag and LogType implementation to avoid unwanted behaviour
+- Changed macro naming for consistency
 
 ### Version 1.1.2 - Namespace convention
 - Changed the namespace naming convention to lowercase for consistency
