@@ -46,7 +46,7 @@ namespace lm {
 
     enum class LogType { Trace, Debug, Info, Warning, Error, Fatal, LogTypeCount };
 
-    inline std::string str(LogType p_logType) {
+    inline std::string str(const LogType p_logType) {
         switch (p_logType) {
             case LogType::Trace:
                 return "[Trace]";
@@ -65,7 +65,7 @@ namespace lm {
         }
     }
 
-    inline std::ostream& operator<<(std::ostream& p_ostream, LogType p_logType) { return p_ostream << str(p_logType); }
+    inline std::ostream& operator<<(std::ostream& p_ostream, const LogType p_logType) { return p_ostream << str(p_logType); }
 
     class Logger {
 
@@ -83,9 +83,9 @@ namespace lm {
         const std::string m_logTag;
         flag m_flags;
 
-        bool isFlagSet(flag p_flag) { return (0 != (m_flags & p_flag)); }
+        bool isFlagSet(flag p_flag) const { return (0 != (m_flags & p_flag)); }
 
-        std::string prefix(LogType p_logType) {
+        std::string prefix(LogType p_logType) const {
             std::ostringstream stream;
 
             if (isFlagSet(flags::LOGTYPE_COLORS))
@@ -106,7 +106,7 @@ namespace lm {
             return stream.str();
         }
 
-        std::string suffix() {
+        std::string suffix() const {
             std::ostringstream stream;
 
             if (isFlagSet(flags::LOGTYPE_COLORS))
@@ -132,15 +132,15 @@ namespace lm {
             return stream.str();
         }
 
-        void output(LogType p_logType, std::string p_message) {
+        void output(LogType p_logType, std::string p_message) const {
             if (isFlagSet(flags::LOGTYPE_FILTER) && filter(p_logType)) return;
             if (isFlagSet(flags::LOGTAG_FILTER) && filter()) return;
             std::cout << p_message;
         }
 
-        bool filter(LogType p_logType) { return isFlagSet(flags::WHITELIST_FILTER) != s_logTypeFilter[(size_t)p_logType]; }
+        bool filter(LogType p_logType) const { return isFlagSet(flags::WHITELIST_FILTER) != s_logTypeFilter[(size_t)p_logType]; }
 
-        bool filter() { return isFlagSet(flags::WHITELIST_FILTER) != s_logTagFilter[m_logTag]; }
+        bool filter() const { return isFlagSet(flags::WHITELIST_FILTER) != s_logTagFilter[m_logTag]; }
 
         static std::string color(LogType p_logType) {
             switch (p_logType) {
@@ -176,7 +176,7 @@ namespace lm {
 
     public:
         template<typename... Types>
-        void log(const LogType p_logType, const Types... p_args) {
+        void log(const LogType p_logType, const Types... p_args) const {
             std::ostringstream stream;
             stream << prefix(p_logType) << fmt(p_args...) << suffix();
             output(p_logType, stream.str());
